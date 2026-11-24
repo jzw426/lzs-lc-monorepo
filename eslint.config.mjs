@@ -27,6 +27,8 @@ export default tseslint.config(
       '.screenshots/**',
       'm1-p0-decision-baseline/**',
       'm1-foundation-acceptance/**',
+      'apps/laya-client/libs/**',
+      'apps/laya-client/types/**',
       '**/*.html',
     ],
   },

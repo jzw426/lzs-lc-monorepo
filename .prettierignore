@@ -1,6 +1,10 @@
 node_modules
 **/dist
 **/coverage
+apps/laya-client/libs
+apps/laya-client/types
+apps/laya-client/assets
+apps/laya-client/settings
 pnpm-lock.yaml
 .trae-html-share-packages
 .screenshots

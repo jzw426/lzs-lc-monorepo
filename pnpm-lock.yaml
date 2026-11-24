@@ -42,6 +42,18 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@types/node@22.18.8)(tsx@4.20.6)
 
+  apps/laya-client:
+    dependencies:
+      '@lzs/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@lzs/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@lzs/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
+
   packages/client:
     dependencies:
       '@lzs/core':

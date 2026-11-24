@@ -1,0 +1,14 @@
+{
+  "name": "@lzs/laya-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lzs/client": "workspace:*",
+    "@lzs/core": "workspace:*",
+    "@lzs/platform": "workspace:*"
+  }
+}
