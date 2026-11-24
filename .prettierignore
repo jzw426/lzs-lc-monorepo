@@ -3,6 +3,14 @@ node_modules
 **/coverage
 apps/laya-client/libs
 apps/laya-client/types
+apps/laya-client/engine
+apps/laya-client/bin
+apps/laya-client/library
+apps/laya-client/local
+apps/laya-client/temp
+apps/laya-client/build
+apps/laya-client/release
+apps/laya-client/packages
 apps/laya-client/assets
 apps/laya-client/settings
 pnpm-lock.yaml

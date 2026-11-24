@@ -1,0 +1,16 @@
+{
+  "physics2D": {
+    "defaultConfig": {
+      "debugDraw": false
+    }
+  },
+  "modules": {
+    "laya.ui": true,
+    "laya.d3": true,
+    "laya.tilemap": true,
+    "laya.physics2D": true
+  },
+  "splash": {
+    "fit": "center"
+  }
+}

@@ -146,7 +146,7 @@ export class GameScene extends Laya.Script {
   }
 
   private readEngineVersion(): string {
-    const version = Laya.version;
+    const version = Laya.LayaEnv.version;
     if (version.length === 0) {
       throw new Error('L3_ENGINE_VERSION_UNKNOWN');
     }
