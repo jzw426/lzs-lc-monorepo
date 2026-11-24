@@ -23,13 +23,14 @@
 - 验收：`pnpm --filter @lzs/laya-client typecheck` 通过；无临时 shim
 - 依赖：T2
 
-## T4 IDE 预览与功能验证
+## [ ] T4 IDE 预览与功能验证
 
 - 交付：V1–V8 验证结果记录（写入台账 §12）
 - 验收：`[L3_BOOT_OK]`、`fnv1a32:92852f6a`、三按钮动作、视图异常隔离、前后台暂停均符合 spec 第 8 节
 - 依赖：T3
+- 结果：V1 通过（IDE 打开工程、编译脚本、导入完整场景成功）；V2–V8 需 GUI 预览运行时采集，当前自动化环境无法取得预览 URL，已记录为阻塞，待人工执行
 
-## T5 文档同步与提交
+## [x] T5 文档同步与提交
 
 - 交付：计划 v1.3（`.scene`→`.ls`）、台账 §12、`.prettierignore`、`eslint.config.mjs`
 - 验收：`pnpm run lint`、`pnpm run format:check`、`pnpm test` 全绿；提交信息含 `R-03`
