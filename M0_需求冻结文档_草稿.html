@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《鲁智深与林冲》M0需求冻结文档（草稿）</title>
+<style>
+:root{--ink:#1f2937;--muted:#64748b;--line:#d7dde5;--paper:#fff;--bg:#f3f5f7;--brand:#175c45;--soft:#edf7f2;--warn:#fff7e6;--danger:#fff1f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}main{max-width:1180px;margin:32px auto;padding:48px 56px;background:var(--paper);box-shadow:0 2px 18px #1f293714}h1{font-size:30px;line-height:1.35;margin:0 0 12px;color:var(--brand)}h2{font-size:22px;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--brand)}h3{font-size:17px;margin:26px 0 10px}p{margin:8px 0}table{width:100%;border-collapse:collapse;margin:12px 0 22px;font-size:14px}th,td{border:1px solid var(--line);padding:9px 11px;vertical-align:top;text-align:left}th{background:var(--soft);font-weight:600}tr:nth-child(even) td{background:#fafbfc}code{background:#eef1f4;padding:2px 5px;border-radius:4px}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:22px 0}.meta div{padding:10px 12px;background:var(--soft);border:1px solid var(--line)}.meta b{display:block;font-size:12px;color:var(--muted)}.note,.warning,.decision{padding:12px 16px;border-left:4px solid var(--brand);background:var(--soft);margin:14px 0}.warning{border-color:#b7791f;background:var(--warn)}.decision{border-color:#b93a32;background:var(--danger)}ul,ol{margin:8px 0 8px 24px;padding:0}.tag{display:inline-block;padding:0 7px;border-radius:4px;background:var(--soft);color:var(--brand);font-size:12px;font-weight:600;white-space:nowrap}.small{font-size:13px;color:var(--muted)}.sign{height:70px}.nowrap{white-space:nowrap}@media(max-width:760px){main{margin:0;padding:24px 18px}.meta{grid-template-columns:1fr 1fr}table{display:block;overflow-x:auto}}@media print{body{background:#fff}main{box-shadow:none;margin:0;max-width:none;padding:0}h2{break-after:avoid}table{break-inside:auto}tr{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+<h1>《鲁智深与林冲》M0需求冻结文档</h1>
+<p><strong>文档性质：</strong>评审草稿；签署前不构成开发基线，签署后作为M1—M9范围、开发与验收的唯一需求基准。</p>
+<div class="meta"><div><b>文档编号</b>LZSLC-PRD-M0-001</div><div><b>版本</b>V0.1-DRAFT</div><div><b>状态</b>待评审</div><div><b>首发平台</b>抖音小游戏</div><div><b>产品形态</b>汉字合成对称塔防</div><div><b>核心题材</b>水浒·野猪林救林冲</div><div><b>需求负责人</b>[TBD]</div><div><b>冻结日期</b>[TBD]</div></div>
+<div class="note"><strong>规范用语：</strong>“必须”表示首发强制要求；“建议”表示待评审方案；“不得”表示禁止行为；“[TBD]”表示尚未决策且不得由开发人员自行补全。</div>
+
+<h2>1. 需求范围边界</h2>
+<h3>1.1 产品合同</h3>
+<table><tr><th>项目</th><th>冻结定义</th></tr>
+<tr><td>目标用户</td><td>希望在碎片时间内完成轻度布阵、随机合成与短局对战的移动端小游戏用户。</td></tr>
+<tr><td>核心任务</td><td>玩家消耗军粮随机获得文字单位，通过部署、合成和拼凑武将姓名建立防线，使对手保护目标先于己方林冲失守。</td></tr>
+<tr><td>对局入口</td><td>登录或游客会话有效、剩余体力满足开局要求、当日配置加载成功。</td></tr>
+<tr><td>完成条件</td><td>一方林冲生命归零或触发已批准的异常结算规则；玩家看到唯一且不可重复的结果与奖励。</td></tr>
+<tr><td>恢复路径</td><td>广告、切后台或短时断网后可恢复；无法恢复时返回明确的对局失效或结算状态，不重复扣除与发奖。</td></tr></table>
+<h3>1.2 首发范围</h3>
+<table><tr><th>范围级别</th><th>内容</th><th>边界</th></tr>
+<tr><td>P0 核心对局</td><td>对称战场、军粮征兵、刀枪骑弓、部署移动、同级合成、姓名拼字、地块解锁、自动攻击、波次、精英/Boss、核心扣血与补偿、胜负结算</td><td>必须完成从进入到结算再到下一局的完整闭环。</td></tr>
+<tr><td>P0 水浒内容</td><td>10名武将、4组人物关系、5张地图、首发敌军/道具/武器配置</td><td>仅替换内容与表现，不改变核心规则结构。</td></tr>
+<tr><td>P0 局外与平台</td><td>体力、星级、职衔、铜钱、商店、主动/被动道具、武器、每日重置、登录、缓存、广告、分享、生命周期、排行榜</td><td>所有奖励与每日状态必须可校验、幂等、可追踪。</td></tr>
+<tr><td>P1 兼容能力</td><td>微信小游戏平台抽象、低端机特效降级、回放与数值模拟</td><td>不要求首发微信版本提审；接口不得阻碍后续适配。</td></tr></table>
+<h3>1.3 统一对象与状态</h3>
+<table><tr><th>对象</th><th>唯一含义</th><th>允许状态</th></tr>
+<tr><td>对局</td><td>双方、地图、种子、配置版本和操作指令组成的战斗实例</td><td>准备→运行⇄暂停→已结算；已结算不可逆</td></tr>
+<tr><td>地块</td><td>战场中可承载一个作战单位或沉睡字牌的位置</td><td>锁定、已解锁空闲、已占用</td></tr>
+<tr><td>兵营</td><td>未部署征兵结果的临时容器，首发容量5</td><td>空闲、持有字牌；刷新覆盖规则见REQ-ECO-003</td></tr>
+<tr><td>基础兵</td><td>刀、枪、骑、弓之一，具有兵种和阶位</td><td>兵营、拖拽、已部署、被合成消耗</td></tr>
+<tr><td>武将字牌</td><td>组成武将姓名的有序字符单位</td><td>沉睡、满足组合、被激活消耗</td></tr>
+<tr><td>核心</td><td>双方各自保护的林冲，不等同于可部署武将林冲</td><td>存活、失守；生命下限为0</td></tr></table>
+
+<h2>2. 已确认需求清单</h2>
+<p class="small">以下为本项目已决定采用的产品需求，不代表对参考游戏未公开规则的源码级断言。</p>
+<h3>2.1 对局、经济与棋盘</h3>
+<table><tr><th>ID</th><th>需求与触发</th><th>处理规则、结果与异常</th></tr>
+<tr><td>REQ-MATCH-001</td><td>玩家点击“开始对局”</td><td>校验体力与当日配置；生成双方镜像初始状态和唯一对局ID；加载失败不得扣体力。</td></tr>
+<tr><td>REQ-MATCH-002</td><td>对局开始</td><td>双方使用相同地图、基础卡池、波次和初始规则；仅经批准的玩家道具/装备可产生差异。首发必须采用本地确定性战斗与异步/模拟对手，真实时PVP不进入首发。</td></tr>
+<tr><td>REQ-ECO-001</td><td>点击征兵</td><td>军粮必须大于等于本次费用；先校验再一次性扣费并生成结果。费用随付费征兵次数递增，具体曲线按DEC-NUM-001批准的流程在M6冻结，此前仅可使用建议基线开发。</td></tr>
+<tr><td>REQ-ECO-002</td><td>击杀普通/精英敌人或核心受伤</td><td>分别触发军粮事件；同一死亡/突破事件只发放一次。普通击杀+1、精英额外+10、核心每次有效受伤补偿+10为评审建议，正式值按DEC-NUM-001批准的流程在M6冻结。</td></tr>
+<tr><td>REQ-ECO-003</td><td>征兵结果进入兵营或再次征兵</td><td>兵营最多5格；未部署备选按冻结规则保留或覆盖，当前建议为“新结果进入空位，无空位则禁止征兵且不扣费”，不得由程序自行决定覆盖。最终见DEC-ECO-002。</td></tr>
+<tr><td>REQ-BOARD-001</td><td>部署或移动单位</td><td>仅允许拖至已解锁空格或合法合成目标；非法目标必须回弹且不改变逻辑状态。开局6块战场地块，其余由营铲解锁。</td></tr>
+<tr><td>REQ-BOARD-002</td><td>使用营铲</td><td>只能解锁合法锁定格；无锁定格时不得消耗；解锁结果立即写入对局状态。</td></tr></table>
+<h3>2.2 合成、武将与战斗</h3>
+<table><tr><th>ID</th><th>需求与触发</th><th>处理规则、结果与异常</th></tr>
+<tr><td>REQ-MERGE-001</td><td>将基础兵拖至另一基础兵</td><td>仅同兵种、同阶、未达上限时合成；消耗两个来源并在目标格生成高一阶单位。不得复制军粮、经验或Buff。</td></tr>
+<tr><td>REQ-HERO-001</td><td>武将字牌满足姓名组合</td><td>按冻结的姓名序列和邻接规则激活；消耗全部组成字牌并生成指定武将。沉睡单字不得攻击。鲁智深在对局拼字中固定使用“鲁达”，图鉴显示“鲁智深”。</td></tr>
+<tr><td>REQ-HERO-002</td><td>首发武将内容</td><td>必须包含鲁达、林冲、花荣、宋江、李逵、关胜、武松、杨志、徐宁、张清；每名武将配置品质、普攻模板、主动技能、成长、武器限制和原著依据。</td></tr>
+<tr><td>REQ-HERO-003</td><td>武将击杀或同将合成</td><td>击杀经验与合成阶位分别计算；合成、离场和重新生成的继承规则由DEC-HERO-002冻结；任何路径不得重复继承或双倍计算。</td></tr>
+<tr><td>REQ-HERO-004</td><td>满足人物关系组合</td><td>支持鲁达×林冲、鲁达×武松×杨志、宋江×李逵、宋江×花荣；同名关系不重复叠加，成员离场后必须移除对应增益。</td></tr>
+<tr><td>REQ-COMBAT-001</td><td>敌人进入攻击范围且冷却完成</td><td>按统一索敌规则选择目标，产生普攻/技能事件；刀为近程单体、枪为穿刺、骑为近程范围、弓为远程单体。</td></tr>
+<tr><td>REQ-COMBAT-002</td><td>伤害或控制事件执行</td><td>统一经过阶位、等级、武器、技能、Buff/debuff修正；目标死亡只触发一次击杀、军粮、经验和回收。</td></tr>
+<tr><td>REQ-COMBAT-003</td><td>技能、关系与道具叠加</td><td>必须遵循数值文档中的预算、上限和互斥规则；动画完成与否不得决定伤害结果。</td></tr></table>
+<h3>2.3 波次、胜负与中断恢复</h3>
+<table><tr><th>ID</th><th>需求与触发</th><th>处理规则、结果与异常</th></tr>
+<tr><td>REQ-WAVE-001</td><td>对局逻辑时间到达刷怪点</td><td>按地图和波次配置生成敌人；路径、数量、生命、速度、精英词条和Boss均数据化。暂停期间逻辑时间不得前进。</td></tr>
+<tr><td>REQ-WAVE-002</td><td>首发地图加载</td><td>包含野猪林、祝家庄、江州法场、曾头市、大名府；不得存在路径阻断、不可达终点或不可解锁的关键格。</td></tr>
+<tr><td>REQ-CORE-001</td><td>敌人到达核心终点</td><td>生成一次突破事件，移除敌人、扣除核心生命并发放补偿；同一敌人不得重复突破。核心生命最小为0。</td></tr>
+<tr><td>REQ-RESULT-001</td><td>逻辑帧事件处理完毕</td><td>一方核心为0且另一方大于0时立即产生唯一胜负；冻结输入、波次和奖励。双方同帧为0的处理由DEC-RES-001决定。</td></tr>
+<tr><td>REQ-LIFE-001</td><td>广告、切后台、系统中断</td><td>进入暂停并停止逻辑时间；恢复时从一致状态继续。无法恢复时进入明确的异常结算或无效对局，不得无限等待。</td></tr></table>
+<h3>2.4 局外、平台与内容</h3>
+<table><tr><th>ID</th><th>需求与触发</th><th>处理规则、结果与异常</th></tr>
+<tr><td>REQ-META-001</td><td>有效对局结算</td><td>按结果更新星级、职衔、胜率和铜钱；同一对局ID重复提交必须返回首次结果且不重复变更。</td></tr>
+<tr><td>REQ-META-002</td><td>装备或购买道具</td><td>主动最多携带2个、被动最多6个；道具仅当日有效；商店购买、装备和卸下均需明确反馈与持久化。</td></tr>
+<tr><td>REQ-META-003</td><td>获得或使用武器</td><td>武器具有品质、类型和适配武将；掉落、合成与装备必须校验内容ID和归属，不得跨类型装备。</td></tr>
+<tr><td>REQ-DAILY-001</td><td>到达可信每日边界</td><td>轮换地图、商店和当日道具，重置每日胜率；跨边界对局的归属按开局日计算，避免结算时换配置。</td></tr>
+<tr><td>REQ-PLATFORM-001</td><td>登录、广告、分享、缓存和排行</td><td>通过平台适配层调用；广告取消/失败/未完整观看不得发奖，完整观看重复回调只发奖一次；平台不可用时有明确提示。</td></tr>
+<tr><td>REQ-CONTENT-001</td><td>水浒内容展示</td><td>人物关系、绰号、武器和剧情须通过原著审校；游戏原创装备须可识别，不得伪称原著专名；不得使用未授权参考游戏素材。</td></tr>
+<tr><td>REQ-REPLAY-001</td><td>开发与测试执行回放</td><td>配置版本、随机种子和有序操作指令必须足以重建对局；同版本重复回放的最终状态哈希一致。</td></tr></table>
+
+<h2>3. 待决策事项</h2>
+<div class="warning"><strong>决策门禁：</strong>M0签署时不得保留P0级[TBD]。未决项的建议方案只是评审输入，不视为已确认需求；依赖该决策的代码、数值和内容不得提前冻结。</div>
+<table><tr><th>ID/级别</th><th>待决策事项</th><th>建议方案</th><th>责任角色/截止节点</th><th>未决期间禁止事项</th></tr>
+<tr><td>DEC-MATCH-001 / P0</td><td>异步对手的数据来源、难度和作弊校验</td><td>首发采用经服务端签发的对手配置与种子，本地战斗、服务端校验结算摘要</td><td>产品+服务端 / T1</td><td>不得承诺真实玩家同步，不得冻结匹配协议</td></tr>
+<tr><td>DEC-NUM-001 / P0</td><td>数值口径、配置基线责任人与正式值冻结流程</td><td>T1批准统一数值口径、初始建议基线与评审流程；M6经模拟和实机评审后冻结正式值</td><td>系统策划 / T1；正式值M6</td><td>不得将建议值写成正式数值</td></tr>
+<tr><td>DEC-ECO-002 / P0</td><td>兵营满员与再次征兵的覆盖规则</td><td>满员禁止征兵且不扣费；若选择覆盖，必须提供二次确认或明确预览</td><td>系统策划+客户端 / T1</td><td>不得实现自动随机覆盖</td></tr>
+<tr><td>DEC-HERO-001 / P0</td><td>字牌邻接方向、顺序和跨区域规则</td><td>使用统一有序邻接匹配器，具体允许方向在交互评审中确定</td><td>系统策划 / T1</td><td>不得分别在各武将中硬编码组合</td></tr>
+<tr><td>DEC-HERO-002 / P0</td><td>武将合成、离场与重新生成时的经验/阶位继承</td><td>合成仅继承目标单位经验且不与来源经验相加；离场后清空该单位经验，重新生成从1级开始</td><td>系统策划 / T1</td><td>不得默认经验相加或同时复制经验与阶位</td></tr>
+<tr><td>DEC-COMB-001 / P0</td><td>索敌优先级、同分规则、合成时弹道处理</td><td>路径进度优先→距离→实体ID；在途弹道按已生成事件结算</td><td>战斗程序+策划 / T1</td><td>不得依赖渲染帧或对象遍历顺序</td></tr>
+<tr><td>DEC-RES-001 / P0</td><td>双归零、断线、超时和无效对局</td><td>双归零记平局且星级不变；异常对局返还体力，不发胜场奖励</td><td>产品+服务端 / T1</td><td>不得由客户端单方决定胜场</td></tr>
+<tr><td>DEC-OPS-001 / P1</td><td>体力上限、广告恢复量、商店价格、职衔门槛</td><td>全部运营配置化，首发前单独冻结</td><td>运营策划 / M5入口</td><td>不得将运营值硬编码</td></tr>
+<tr><td>DEC-DEVICE-001 / P0</td><td>最低设备、目标网络与性能档位</td><td>建立低/中/高设备矩阵和统一标准压力场景</td><td>测试+客户端 / T1</td><td>不得使用“主流手机均可”作为验收口径</td></tr>
+<tr><td>DEC-LEGAL-001 / P0</td><td>名称与素材使用原则、广告与隐私合规方案</td><td>T1确定合规边界和审查清单；M8完成平台与法务上线审核，未通过项替换或移除</td><td>发行+法务 / T1；上线审核M8前</td><td>不得使用来源不明素材上线</td></tr></table>
+
+<h2>4. 排除项说明</h2>
+<table><tr><th>ID</th><th>排除内容</th><th>排除原因与后续条件</th></tr>
+<tr><td>OUT-001</td><td>真实时PVP、WebSocket帧同步、好友房和组队</td><td>改变网络架构、测试范围和反作弊要求；须另行立项并重新评审。</td></tr>
+<tr><td>OUT-002</td><td>角色自由移动、手动普攻、动作护送玩法</td><td>与已确定的文字塔防核心冲突。</td></tr>
+<tr><td>OUT-003</td><td>五行、法术、门派、装备套装、阵营克制</td><td>增加额外策略层，破坏与参考玩法的一致性；不得以防不平衡为由自行加入。</td></tr>
+<tr><td>OUT-004</td><td>公会、社交关系链、世界聊天</td><td>不属于首发完整对局闭环，且引入额外审核与运营成本。</td></tr>
+<tr><td>OUT-005</td><td>微信版本正式发布</td><td>首发仅保留平台抽象；微信提审需另建发布任务。</td></tr>
+<tr><td>OUT-006</td><td>对参考游戏服务端、源码、未公开概率的“1:1保证”</td><td>外部观察无法证明；项目仅对自有明确需求和验收容差负责。</td></tr>
+<tr><td>OUT-007</td><td>长篇剧情、过场动画和配音</td><td>避免延迟开局；首发仅保留一句开场与短图鉴文本。</td></tr></table>
+
+<h2>5. 验收标准</h2>
+<h3>5.1 M0文档退出门禁</h3>
+<table><tr><th>ID</th><th>验收项</th><th>通过标准</th><th>证据</th></tr>
+<tr><td>AC-M0-001</td><td>需求完整性</td><td>首发P0能力100%具有REQ编号、触发、规则、结果和异常；不得存在空泛目标</td><td>需求追踪矩阵</td></tr>
+<tr><td>AC-M0-002</td><td>决策闭环</td><td>P0待决策项为0；P1项有责任人、截止节点且不影响P0开发</td><td>决策记录</td></tr>
+<tr><td>AC-M0-003</td><td>术语一致</td><td>军粮、兵营、地块、字牌、核心、对局状态在三份研发文档及测试用例中含义一致</td><td>术语审查记录</td></tr>
+<tr><td>AC-M0-004</td><td>范围可追踪</td><td>每项P0需求映射至开发任务、配置项和至少一个验收用例；排除项无对应首发的隐性任务</td><td>追踪矩阵与任务清单</td></tr>
+<tr><td>AC-M0-005</td><td>可测试性</td><td>胜负、重复结算、广告取消、跨日、满兵营、无格子、双归零等均有可执行用例</td><td>测试设计评审</td></tr>
+<tr><td>AC-M0-006</td><td>内容可生产</td><td>10武将、4关系、5地图均有内容负责人、资源清单和原著依据</td><td>内容生产表</td></tr>
+<tr><td>AC-M0-007</td><td>基线签署</td><td>产品、系统策划、客户端、服务端、美术、测试、发行责任人全部签署；缺一方不得标记“已冻结”</td><td>签署页</td></tr></table>
+<h3>5.2 下游功能验收总则</h3>
+<ul><li><strong>确定性：</strong>同配置版本、种子与输入序列的重复回放，最终状态哈希必须一致。</li><li><strong>事务性：</strong>征兵、合成、拼字、购买、结算和广告奖励不得出现半完成状态或重复收益。</li><li><strong>表现隔离：</strong>降低动画、帧率或特效不得改变战斗结果。</li><li><strong>配置化：</strong>兵种、武将、技能、地图、波次、武器、道具与运营数值不得散落硬编码。</li><li><strong>恢复性：</strong>广告、后台、弱网与重连均有唯一可解释结果，不允许无限等待。</li><li><strong>合规性：</strong>平台、隐私和素材来源检查全部通过后方可提审。</li></ul>
+<h3>5.3 需求变更控制</h3>
+<p>冻结后任何范围、规则或数值口径变化必须提交变更单，包含变更原因、影响REQ/DEC编号、代码与配置影响、回放兼容性、回归范围及审批人。未经批准不得直接进入正式基线。变更后升级文档版本并重新生成追踪矩阵；紧急线上修复可先按故障流程降级，但不得静默修改已冻结规则。</p>
+<h3>5.4 签署</h3>
+<table><tr><th>角色</th><th>姓名/签署</th><th>日期</th></tr><tr><td>产品负责人</td><td class="sign"></td><td></td></tr><tr><td>系统策划</td><td class="sign"></td><td></td></tr><tr><td>客户端/服务端</td><td class="sign"></td><td></td></tr><tr><td>美术/内容</td><td class="sign"></td><td></td></tr><tr><td>测试/发行</td><td class="sign"></td><td></td></tr></table>
+
+<h2>6. 时间节点里程碑</h2>
+<p class="small">本草稿不虚构工期。T0—T4为强制先后节点；日历日期由项目排期在评审前填写，节点以交付物验收通过而非日期到达为完成依据。</p>
+<table><tr><th>时间节点</th><th>计划日期</th><th>里程碑</th><th>必须交付</th><th>退出条件</th></tr>
+<tr><td>T0</td><td>[TBD]</td><td>M0评审启动</td><td>本文档、范围清单、待决策清单、需求追踪矩阵初版</td><td>所有责任角色收到同版材料，评审输入完整</td></tr>
+<tr><td>T1</td><td>[TBD]</td><td>规则澄清截止</td><td>DEC决策记录、数值基线初稿、设备矩阵、对局与异常规则</td><td>P0决策全部形成“批准/否决并替换”的明确结论</td></tr>
+<tr><td>T2</td><td>[TBD]</td><td>需求冻结评审</td><td>更新后的PRD、验收用例目录、内容与资源清单</td><td>AC-M0-001至006全部通过</td></tr>
+<tr><td>T3</td><td>[TBD]</td><td>M0基线生效</td><td>V1.0签署文档、基线标签、变更控制入口</td><td>AC-M0-007通过；后续开发只引用V1.0或经批准的更高版本</td></tr>
+<tr><td>T4</td><td>[TBD]</td><td>M1准入检查</td><td>M1技术选型基线、工程任务拆解、CI与真机验证计划</td><td>M0已生效；技术选型不得反向改变产品规则，若冲突必须提交变更</td></tr></table>
+<div class="decision"><strong>M0最终退出判据：</strong>范围明确、P0决策清零、需求可测试、内容可生产、责任角色签署、基线可追踪。任何一项不满足，状态保持“评审中”，不得进入“已冻结”。</div>
+</main></body></html>

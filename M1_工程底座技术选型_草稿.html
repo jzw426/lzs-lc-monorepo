@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>《鲁智深与林冲》M1工程底座技术选型（草稿）</title>
+<style>
+:root{--ink:#1f2937;--muted:#64748b;--line:#d7dde5;--paper:#fff;--bg:#f3f5f7;--brand:#175c45;--soft:#edf7f2;--warn:#fff7e6}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}main{max-width:1240px;margin:32px auto;padding:48px 52px;background:var(--paper);box-shadow:0 2px 18px #1f293714}h1{font-size:29px;line-height:1.35;margin:0 0 12px;color:var(--brand)}h2{font-size:22px;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--brand)}h3{font-size:17px;margin:26px 0 10px}p{margin:8px 0}table{width:100%;border-collapse:collapse;margin:12px 0 22px;font-size:13px}th,td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left;min-width:90px}th{background:var(--soft);font-weight:600}tr:nth-child(even) td{background:#fafbfc}code{background:#eef1f4;padding:2px 5px;border-radius:4px}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:22px 0}.meta div{padding:10px 12px;background:var(--soft);border:1px solid var(--line)}.meta b{display:block;font-size:12px;color:var(--muted)}.note,.warning{padding:12px 16px;border-left:4px solid var(--brand);background:var(--soft);margin:14px 0}.warning{border-color:#b7791f;background:var(--warn)}ul,ol{margin:8px 0 8px 24px;padding:0}.small{font-size:13px;color:var(--muted)}pre{white-space:pre-wrap;background:#f5f7f9;border:1px solid var(--line);padding:14px;overflow:auto}@media(max-width:760px){main{margin:0;padding:24px 18px}.meta{grid-template-columns:1fr 1fr}table{display:block;overflow-x:auto}}@media print{body{background:#fff}main{box-shadow:none;margin:0;max-width:none;padding:0}h2,h3{break-after:avoid}tr{break-inside:avoid}}
+</style></head><body><main>
+<h1>《鲁智深与林冲》M1工程底座技术选型</h1>
+<p><strong>目标：</strong>建立可构建、可测试、可回放、可部署、可回滚的工程底座，为M2战斗内核及后续内容生产提供统一约束。</p>
+<div class="meta"><div><b>文档编号</b>LZSLC-TECH-M1-001</div><div><b>版本</b>V0.1-DRAFT</div><div><b>状态</b>待技术评审</div><div><b>适用阶段</b>M1及后续继承</div><div><b>客户端</b>LayaAir 3.x / TypeScript</div><div><b>服务端</b>Node.js LTS / Fastify</div><div><b>首发形态</b>异步对局</div><div><b>技术负责人</b>[TBD]</div></div>
+<div class="note"><strong>版本原则：</strong>所有“3.x、5.x、LTS”在技术评审时必须落为精确版本并写入锁文件或运行时配置；构建环境禁止使用浮动最新版。本文不将参考游戏未公开的内部实现当作本项目约束。</div>
+
+<h2>1. 技术约束与选型优先级</h2>
+<ol><li><strong>确定性优先：</strong>同配置、种子和输入必须得到同结果，优先于表现便利。</li><li><strong>小游戏适配优先：</strong>包体、内存、触摸和生命周期优先于通用引擎功能数量。</li><li><strong>核心复用优先：</strong>战斗内核同时运行于客户端、测试工具和服务端校验。</li><li><strong>简单完整优先：</strong>首发采用模块化单体，不为未来假设引入微服务和消息队列。</li><li><strong>可恢复优先：</strong>构建、配置、数据库和资源发布均需可追踪、可回滚。</li></ol>
+
+<h2>2. 技术栈选型</h2>
+<table><tr><th>选型</th><th>建议</th><th>选型依据</th><th>优势对比</th><th>适用场景</th><th>风险预案</th></tr>
+<tr><td>游戏引擎</td><td><strong>LayaAir 3.x稳定版</strong>，锁定精确小版本</td><td>符合既有方案，适合2D汉字、Tween、Spine和小游戏发布</td><td>相较Unity WebGL首包与运行时更轻；相较自行写Canvas，场景、动画和发布链路完整。Cocos可作备选但会增加迁移成本</td><td>竖屏2D战场、UI、动画、抖音构建</td><td>引擎升级先在分支跑回放、真机与包体回归；出现阻断缺陷时回退锁定版本，不在功能开发中顺带升级</td></tr>
+<tr><td>开发语言</td><td><strong>TypeScript 5.x，strict模式</strong></td><td>客户端、服务端和工具共享类型与战斗包</td><td>相较JavaScript可在编译期发现配置和状态错误；相较C#无需Unity/Wasm链路</td><td>全部游戏逻辑、服务、工具与配置类型</td><td>禁止新增无说明<code>any</code>；历史例外登记并设清理任务。构建失败不得通过关闭strict绕过</td></tr>
+<tr><td>运行时</td><td><strong>Node.js 22 LTS</strong>，评审时锁定补丁版本</td><td>与TypeScript核心同语言，便于服务端重放和校验</td><td>相较独立Go/Java服务可减少双语言战斗实现偏差；超高并发非首发约束</td><td>Fastify服务、模拟器、配置和构建工具</td><td>若性能压测不达标，先剖析与水平扩容；仅在证明Node为瓶颈后拆分计算服务，不预先微服务化</td></tr>
+<tr><td>包管理</td><td><strong>pnpm workspace + 锁文件</strong></td><td>管理client、core、server、content、tools共享包</td><td>相较复制代码可保证版本一致；相较npm扁平安装更适合单仓依赖约束</td><td>单仓多包、CI缓存和可重复安装</td><td>CI执行frozen lockfile；依赖冲突必须显式评审，不允许删除锁文件“修复”</td></tr>
+<tr><td>配置格式</td><td><strong>JSON + JSON Schema + AJV</strong></td><td>跨客户端、服务端和工具读取，配置需自动校验</td><td>相较硬编码可热更新和 diff；相较YAML减少隐式类型与缩进错误</td><td>武将、技能、地图、波次、道具和运营参数</td><td>Schema不兼容即构建失败；线上配置带版本与hash，加载失败回退到包内已签名基线</td></tr>
+<tr><td>测试框架</td><td><strong>Vitest + fast-check</strong></td><td>适合TS核心单测、性质测试和批量种子回放</td><td>相较仅手工对局可覆盖随机序列、边界与回归；UI真机测试另行保留</td><td>合成、资源、拼字、伤害、结算和不变量</td><td>随机失败必须输出种子与最小复现用例；不得通过删除失败种子或放宽断言消除失败</td></tr>
+<tr><td>质量工具</td><td><strong>ESLint + Prettier + TypeScript编译检查</strong></td><td>统一代码风格并提前发现错误</td><td>相较人工 review 风格可自动执行，让评审聚焦逻辑</td><td>本地提交、PR和CI</td><td>规则变更单独提交；禁止在同一PR中大规模格式化与功能修改混合</td></tr></table>
+
+<h2>3. 中间件选型</h2>
+<table><tr><th>中间件</th><th>建议</th><th>选型依据</th><th>优势对比</th><th>适用场景</th><th>风险预案</th></tr>
+<tr><td>HTTP框架</td><td><strong>Fastify</strong></td><td>轻量、schema友好、TS生态成熟，符合模块化单体</td><td>相较NestJS启动与结构更轻；相较原生HTTP具备路由、校验和插件边界</td><td>登录会话、对局、商店、结算、配置接口</td><td>插件版本锁定；统一错误码和超时。若团队已有NestJS规范可替换，但不得同时维护两套HTTP体系</td></tr>
+<tr><td>持久化数据库</td><td><strong>PostgreSQL</strong></td><td>玩家、对局、奖励、武器和流水需要事务与唯一约束</td><td>相较仅Redis可可靠持久化；相较文档数据库更适合幂等键、关系与对账</td><td>账户、档案、对局摘要、奖励流水、运营配置版本</td><td>每日备份与恢复演练；迁移采用expand→migrate→contract。奖励幂等最终由数据库唯一约束兜底</td></tr>
+<tr><td>缓存与限流</td><td><strong>Redis</strong></td><td>会话、短期锁、限流和热点配置需要低延迟</td><td>相较进程内存支持多实例；不替代数据库事实源</td><td>会话缓存、接口限流、配置缓存、短期分布式锁</td><td>Redis故障时关闭非必要缓存并限流；不得因缓存丢失重复发奖。核心结算回源数据库</td></tr>
+<tr><td>消息与异步任务</td><td><strong>首发不引入MQ，使用数据库事务外盒（Outbox）</strong></td><td>当前异步任务量有限，可靠性优先于基础设施数量</td><td>相较直接“库写一半再发消息”可避免丢失；相较Kafka/RabbitMQ运维更轻</td><td>结算后排行更新、埋点补发、非实时通知</td><td>设置重试、死信记录和人工重放入口；任务幂等。确有吞吐证据后再评估MQ</td></tr>
+<tr><td>资源分发</td><td><strong>对象存储 + CDN + 内容hash清单</strong></td><td>动画、音频和活动资源不应全部进入首包</td><td>相较固定服务器目录具备缓存、版本和回滚能力</td><td>分包外大资源、活动图、音频和版本化内容</td><td>资源以hash不可变发布；CDN失败重试备用域名或包内核心资源；旧清单不得立即删除旧资源</td></tr>
+<tr><td>日志与追踪</td><td><strong>Pino + OpenTelemetry</strong></td><td>需要结构化日志、对局ID串联和性能定位</td><td>相较零散console日志可检索、可采样、可跨服务关联</td><td>API、结算、构建、加载、慢查询和异常</td><td>日志脱敏与采样；监控系统故障不得阻塞战斗。禁止记录凭证、完整个人信息和广告敏感参数</td></tr></table>
+
+<h2>4. 架构模式</h2>
+<table><tr><th>架构决策</th><th>建议</th><th>选型依据</th><th>优势对比</th><th>适用场景</th><th>风险预案</th></tr>
+<tr><td>总体形态</td><td><strong>单仓 + 模块化单体服务</strong></td><td>小团队首发、共享核心和配置，边界清晰但避免分布式复杂度</td><td>相较微服务减少部署与调试成本；相较单文件项目仍可独立测试模块</td><td>client/core/server/content/tools/platform六包</td><td>模块依赖由lint规则限制；只有稳定边界和独立扩容证据才允许拆服务</td></tr>
+<tr><td>战斗核心</td><td><strong>纯逻辑、固定30 tick/s、命令输入、事件输出</strong></td><td>保证回放和服务端复用</td><td>相较渲染驱动逻辑不受FPS、广告和动画影响</td><td>移动、索敌、攻击、波次、合成和结算</td><td>掉帧只补逻辑tick并限制单帧追赶上限；绝不通过跳 tick 改结果。性能不足时优化逻辑或降渲染</td></tr>
+<tr><td>确定性数值</td><td><strong>整数tick、整数最小单位、定点位置、规范排序</strong></td><td>避免wall-clock、对象遍历和浮点误差导致分歧</td><td>相较浮点秒计时更适合状态hash与服务端重放</td><td>资源、生命、伤害、冷却、路径和实体排序</td><td>禁止核心调用Date.now/Math.random；发现除法或取整差异时集中定义舍入规则并加跨运行时测试</td></tr>
+<tr><td>随机数</td><td><strong>xoshiro128**或评审批准的等价32位算法，显式种子</strong></td><td>需要跨Node与小游戏端一致的位运算和可复现序列</td><td>相较Math.random可回放；相较每次请求服务端随机更易重放整个对局</td><td>征兵、字牌、道具和经批准的Boss随机</td><td>算法与版本写入对局头；升级算法不改变旧对局。卡池顺序和抽样次数固定，禁止表现层消耗随机数</td></tr>
+<tr><td>战斗事件</td><td><strong>有序事件队列 + 统一伤害/结算管线</strong></td><td>技能、Buff和道具组合需要一致顺序</td><td>相较各单位自行扣血可减少重复死亡和顺序歧义</td><td>命中、控制、死亡、资源、经验、突破和胜负</td><td>顺序固定为tick→阶段→实体ID→事件序号；新增事件必须附顺序测试与旧回放回归</td></tr>
+<tr><td>表现架构</td><td><strong>状态快照/事件驱动View，View只读核心</strong></td><td>避免动画和UI修改战斗数据</td><td>相较双向绑定更易暂停、降级和回放</td><td>汉字、Tween、Spine、音效、伤害数字</td><td>用依赖检查禁止core引用Laya对象；表现异常仅降级表现，不得重置核心</td></tr>
+<tr><td>平台架构</td><td><strong>Port/Adapter适配器 + 本地Mock</strong></td><td>抖音首发且保留微信适配，测试需脱离平台</td><td>相较业务代码散布tt调用，差异集中且可测试</td><td>登录、广告、分享、存储、生命周期、分包</td><td>平台API变化只修改适配器；无平台能力时明确失败，不伪造成功回调</td></tr>
+<tr><td>服务接口</td><td><strong>HTTPS REST/JSON，版本化，数据库事务保证结算</strong></td><td>首发异步对局无需持续连接</td><td>相较WebSocket更易缓存、追踪、重试和扩容</td><td>配置、对局创建、结算、商店和档案</td><td>请求带requestId/idempotencyKey；超时重试必须使用同键。真实时需求出现时另行架构评审</td></tr>
+<tr><td>配置与回放版本</td><td><strong>gameVersion + contentVersion + rulesVersion + configHash</strong></td><td>旧对局与历史内容必须可解释</td><td>相较单一版本号能区分代码、规则和内容变化</td><td>发布、结算、回放、客服排查</td><td>版本不兼容时拒绝结算或进入明确无效对局；不得加载半套新旧配置</td></tr></table>
+<h3>4.1 推荐单仓边界</h3>
+<pre>packages/
+  core/       纯TypeScript战斗、随机、命令、事件、快照；禁止Laya与平台API
+  client/     LayaAir场景、输入、动画、音频；只通过端口调用core
+  server/     Fastify接口、数据库、结算与回放校验
+  content/    JSON、Schema、内容校验与版本清单
+  tools/      模拟器、配置导出、压力测试、构建工具
+  platform/   抖音/微信Adapter及Mock
+</pre>
+
+<h2>5. 开发规范</h2>
+<table><tr><th>规范项</th><th>强制规则</th><th>依据与优势</th><th>适用场景</th><th>风险预案</th></tr>
+<tr><td>代码与注释</td><td>TypeScript strict；公开接口必须有类型；业务注释使用中文；禁止无说明any、魔法数字和隐式全局状态</td><td>减少跨模块歧义，便于AI与人工共同维护</td><td>全部包</td><td>临时例外必须写原因、责任人和移除条件；CI统计例外不得持续增加</td></tr>
+<tr><td>模块依赖</td><td>依赖方向只允许client/server/tools→core/content、client→platform；core不得依赖client/server/platform</td><td>保持核心可复用与可测试</td><td>PR静态检查</td><td>违规即构建失败；确需调整必须技术评审而非绕过规则</td></tr>
+<tr><td>配置规范</td><td>内容ID稳定不可复用；数值有单位、范围、默认值和版本；禁止删除仍被历史回放引用的内容</td><td>保证内容与旧对局可追踪</td><td>全部武将、技能、地图和运营配置</td><td>Schema及引用检查；缺失资源/引用阻断发布</td></tr>
+<tr><td>Git与评审</td><td>短分支+小PR；Conventional Commits；功能、格式化和依赖升级分开；核心战斗至少2名评审，其余至少1名</td><td>降低合并和回归成本</td><td>所有人工及AI生成代码</td><td>AI产出与人工同门禁；不得自我生成后直接合入。紧急修复需补回归测试</td></tr>
+<tr><td>测试门禁</td><td>core行覆盖率≥90%、分支≥85%；经济、合成、拼字、突破、结算关键分支100%；所有随机失败记录种子</td><td>优先覆盖高风险规则而非追求全项目数字</td><td>PR、 nightly模拟和发布</td><td>覆盖不足阻断合入；禁止通过排除关键文件达标</td></tr>
+<tr><td>回放与回归</td><td>核心逻辑PR必须运行固定黄金回放集；预期结果变化必须附规则变更编号和新基线</td><td>区分合法规则调整与非预期行为变化</td><td>战斗、数值、动画隔离测试</td><td>不得直接批量更新快照而无人工差异说明</td></tr>
+<tr><td>安全与密钥</td><td>密钥只进入环境密钥管理；仓库禁止token、数据库密码和广告私密配置；日志脱敏</td><td>降低泄露与合规风险</td><td>本地、CI、测试、生产</td><td>发现泄露立即吊销轮换并清理历史；不得只删除当前文件后继续上线</td></tr>
+<tr><td>文档与ADR</td><td>每项影响核心规则、数据格式、部署或依赖升级的决策写简短ADR，关联REQ/DEC编号</td><td>防止技术实现静默改变需求</td><td>技术评审和变更</td><td>无ADR不得变更已冻结协议；文档与代码同PR更新</td></tr></table>
+
+<h2>6. 部署方案</h2>
+<h3>6.1 环境与发布链</h3>
+<table><tr><th>项目</th><th>建议方案</th><th>依据与优势</th><th>适用场景</th><th>风险预案</th></tr>
+<tr><td>环境划分</td><td>local、test、staging、production四环境；账户、数据库、存储、广告位和密钥完全隔离</td><td>避免测试数据污染生产，支持发布前等效验证</td><td>开发、回归、预发和正式</td><td>配置按环境注入；启动时输出环境与非敏感版本信息，禁止生产误连测试广告/数据库</td></tr>
+<tr><td>本地依赖</td><td>容器化PostgreSQL/Redis；core与content测试不强制启动容器</td><td>统一依赖版本，同时保持核心测试轻量</td><td>服务端联调和集成测试</td><td>提供一键初始化与清空脚本；不得使用生产数据作为本地默认数据</td></tr>
+<tr><td>服务端部署</td><td>Node.js服务构建为不可变容器；生产优先托管PostgreSQL/Redis；多实例无本地会话事实源</td><td>便于滚动发布、扩容和恢复</td><td>API、结算、配置和后台任务</td><td>健康检查未通过不切入流量；实例退出前完成请求排水；后台任务使用可重入幂等设计</td></tr>
+<tr><td>小游戏构建</td><td>锁定LayaAir构建环境的专用CI runner；产物包含精确引擎、代码、内容和资源版本</td><td>避免不同开发机产生不可解释差异</td><td>抖音测试包、体验包与正式包</td><td>若引擎CLI不支持某构建步骤，保留受控专用构建机并上传校验hash；不得手工修改产物后直发</td></tr>
+<tr><td>CI门禁</td><td>安装→类型/依赖检查→lint→单测/性质测试→Schema→黄金回放→服务端集成→构建→包体与产物hash</td><td>任何阶段失败均不产生可发布候选</td><td>PR、主分支与发布标签</td><td>缓存仅按锁文件和工具版本复用；异常时清理缓存重建，不允许跳过重放和测试</td></tr>
+<tr><td>资源发布</td><td>先上传hash资源，再发布配置清单，最后切换客户端可见版本；旧资源保留至旧对局与缓存窗口结束</td><td>避免清单先于资源导致404</td><td>动画、音频、活动及内容更新</td><td>CDN校验失败即停止切换；回滚只回指旧清单，核心包内资源始终可启动</td></tr>
+<tr><td>数据库发布</td><td>向后兼容的expand→migrate→contract；迁移与代码发布解耦</td><td>支持滚动升级和回滚</td><td>玩家、流水、武器、商店等结构变更</td><td>破坏性变更至少跨越兼容版本；迁移前备份并验证恢复；失败时停止发布而非反复执行</td></tr>
+<tr><td>服务回滚</td><td>不可变镜像与配置版本绑定；采用滚动或蓝绿切换；数据库事实源不回滚到不兼容旧结构</td><td>缩短故障定位与恢复路径</td><td>异常结算、加载失败或严重性能回退</td><td>无法兼容时优先关闭新功能/新配置并维持服务；禁止直接恢复数据库备份覆盖新流水</td></tr>
+<tr><td>监控告警</td><td>启动成功率、API错误率、P95延迟、结算冲突、回放不一致、资源404、广告异常和任务积压</td><td>覆盖核心闭环而非仅CPU</td><td>预发和上线</td><td>告警带版本、环境、对局/请求ID；监控不可用时启用保守发布，不继续扩大流量</td></tr></table>
+
+<h2>7. 综合风险登记</h2>
+<table><tr><th>风险</th><th>触发信号</th><th>预防</th><th>应急处置</th></tr>
+<tr><td>客户端/服务端战斗分歧</td><td>同回放hash不同</td><td>共享core、整数tick、跨运行时黄金用例</td><td>暂停相关版本结算，保留种子与事件流，回退共同可用版本</td></tr>
+<tr><td>引擎或平台升级破坏构建</td><td>CI或真机启动失败</td><td>锁版本、专用runner、升级独立分支</td><td>回退引擎/基础库与上一不可变产物</td></tr>
+<tr><td>配置或资源不兼容</td><td>Schema失败、hash不符、CDN404</td><td>原子清单、引用校验、先资源后清单</td><td>回退包内基线或旧清单，禁止加载半套内容</td></tr>
+<tr><td>重复结算/广告奖励</td><td>同对局或请求产生多条有效流水</td><td>数据库唯一约束、幂等键、状态机</td><td>冻结异常奖励入口，按流水对账与补偿，不重跑整个对局</td></tr>
+<tr><td>Node服务性能不足</td><td>P95持续超标且CPU/事件循环饱和</td><td>压测、异步I/O、避免JSON大对象复制</td><td>限流与水平扩容；有证据后再拆独立回放计算worker</td></tr>
+<tr><td>AI生成代码引入隐性规则变化</td><td>黄金回放差异、无REQ/ADR的新行为</td><td>同人工评审、测试和依赖约束</td><td>回退PR，补最小复现和规则测试，不接受仅修改快照</td></tr></table>
+
+<h2>8. M1交付与验收门禁</h2>
+<table><tr><th>交付物</th><th>通过标准</th><th>验证证据</th></tr>
+<tr><td>单仓工程与精确版本清单</td><td>干净环境可按文档安装；锁文件、运行时和引擎版本一致</td><td>全新环境构建日志</td></tr>
+<tr><td>core/client/server/content/tools/platform边界</td><td>依赖规则自动检查通过，core可在无Laya环境运行</td><td>CI报告与示例测试</td></tr>
+<tr><td>固定帧、种子随机、命令/事件和快照原型</td><td>同输入跨重复运行hash一致；核心无Date.now/Math.random</td><td>跨运行时回放报告</td></tr>
+<tr><td>配置Schema与版本清单</td><td>错误字段、非法引用和版本hash不符会被阻断</td><td>正反例校验报告</td></tr>
+<tr><td>平台Adapter与Mock</td><td>Mock支持成功、取消、失败、超时和重复回调；无tt环境可开发</td><td>平台契约测试</td></tr>
+<tr><td>数据库、缓存与流水底座</td><td>唯一约束、事务、迁移、备份恢复和Redis失效路径经过测试</td><td>集成测试与恢复演练</td></tr>
+<tr><td>CI与部署流水线</td><td>任一门禁失败不能生成发布候选；产物可追踪至提交和配置版本</td><td>流水线记录与产物hash</td></tr>
+<tr><td>抖音真机技术Demo</td><td>完成启动、加载、暂停恢复和构建；目标设备矩阵内无阻断问题</td><td>真机记录与问题清单</td></tr>
+<tr><td>回滚与故障演练</td><td>服务、配置清单和资源各完成一次回滚/恢复；无重复流水</td><td>演练报告</td></tr></table>
+<div class="warning"><strong>M1退出条件：</strong>以上交付全部通过，且不存在依赖浮动版本、不可复现构建、核心调用平台API、无种子随机或手工修改发布产物等未决风险。M1只证明工程能力，不以“页面能打开”替代确定性与可恢复性验收。</div>
+</main></body></html>
