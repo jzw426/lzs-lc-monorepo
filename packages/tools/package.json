@@ -1,0 +1,27 @@
+{
+  "name": "@lzs/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "fixtures"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "validate:content": "tsx src/cli.ts validate-content",
+    "replay:golden": "tsx src/cli.ts replay fixtures/golden-replay.json --verify",
+    "simulate": "tsx src/cli.ts simulate"
+  },
+  "dependencies": {
+    "@lzs/content": "workspace:*",
+    "@lzs/core": "workspace:*"
+  }
+}

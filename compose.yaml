@@ -1,0 +1,90 @@
+# All credentials in this file are local-development examples only.
+services:
+  postgres:
+    image: postgres:16.10-bookworm
+    environment:
+      POSTGRES_DB: lzs
+      POSTGRES_USER: lzs
+      POSTGRES_PASSWORD: local-only
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U lzs -d lzs']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.4.2-bookworm
+    command: ['redis-server', '--appendonly', 'yes', '--requirepass', 'local-only']
+    ports:
+      - '127.0.0.1:6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD-SHELL', 'REDISCLI_AUTH=local-only redis-cli ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    image: lzs-server:local
+    environment:
+      APP_ENV: local
+      HOST: 0.0.0.0
+      PORT: '3000'
+      LOG_LEVEL: info
+      GAME_VERSION: 0.1.0-m1
+      IDEMPOTENCY_STORE: postgres
+      DATABASE_URL: postgresql://lzs:local-only@postgres:5432/lzs
+      REDIS_URL: redis://:local-only@redis:6379
+      OTEL_SERVICE_NAME: lzs-server
+    ports:
+      - '127.0.0.1:3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/health/ready').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    image: lzs-server:local
+    profiles: ['migrate']
+    command: ['node', 'dist/migrate.js']
+    environment:
+      APP_ENV: local
+      HOST: 0.0.0.0
+      PORT: '3000'
+      LOG_LEVEL: info
+      GAME_VERSION: 0.1.0-m1
+      IDEMPOTENCY_STORE: postgres
+      DATABASE_URL: postgresql://lzs:local-only@postgres:5432/lzs
+      REDIS_URL: redis://:local-only@redis:6379
+      OTEL_SERVICE_NAME: lzs-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  redis-data:

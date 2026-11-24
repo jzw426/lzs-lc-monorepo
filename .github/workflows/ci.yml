@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.6.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Test core with coverage
+        run: pnpm run test:coverage
+
+      - name: Upload core coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-coverage
+          path: packages/core/coverage
+          if-no-files-found: error
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Validate content
+        run: pnpm run validate:content
+
+      - name: Replay golden fixtures
+        run: pnpm run replay:golden

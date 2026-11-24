@@ -1,0 +1,9 @@
+node_modules
+**/dist
+**/coverage
+pnpm-lock.yaml
+.trae-html-share-packages
+.screenshots
+m1-p0-decision-baseline
+m1-foundation-acceptance
+*.html

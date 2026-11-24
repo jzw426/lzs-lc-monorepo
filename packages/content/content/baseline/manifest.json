@@ -1,0 +1,17 @@
+{
+  "contentVersion": "content-m1.0",
+  "rulesVersion": "rules-m1.0",
+  "configHash": "fnv1a32:e7ae79c0",
+  "tickRate": 30,
+  "economy": {
+    "initialGrain": 100,
+    "barracksCapacity": 5,
+    "recruitCost": 10
+  },
+  "units": [
+    { "id": "dao", "name": "刀", "attack": 12, "maxHealth": 120 },
+    { "id": "qiang", "name": "枪", "attack": 10, "maxHealth": 100 },
+    { "id": "qi", "name": "骑", "attack": 14, "maxHealth": 140 },
+    { "id": "gong", "name": "弓", "attack": 9, "maxHealth": 80 }
+  ]
+}

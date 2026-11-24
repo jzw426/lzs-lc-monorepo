@@ -1,0 +1,12 @@
+node_modules
+**/node_modules
+**/dist
+**/coverage
+.git
+.screenshots
+.trae-html-share-packages
+m1-p0-decision-baseline
+*.html
+.env
+.env.*
+!.env.example

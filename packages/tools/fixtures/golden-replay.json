@@ -1,0 +1,25 @@
+{
+  "config": {
+    "seed": 20260304,
+    "initialGrain": 100,
+    "barracksCapacity": 5,
+    "recruitCost": 10,
+    "deck": ["刀", "枪", "骑", "弓"],
+    "versions": {
+      "gameVersion": "0.1.0-m1",
+      "contentVersion": "content-m1.0",
+      "rulesVersion": "rules-m1.0",
+      "configHash": "fnv1a32:e7ae79c0"
+    }
+  },
+  "totalTicks": 8,
+  "commands": [
+    { "type": "recruit", "tick": 0, "sequence": 0, "commandId": "golden-0" },
+    { "type": "recruit", "tick": 1, "sequence": 0, "commandId": "golden-1" },
+    { "type": "recruit", "tick": 2, "sequence": 0, "commandId": "golden-2" },
+    { "type": "recruit", "tick": 3, "sequence": 0, "commandId": "golden-3" },
+    { "type": "recruit", "tick": 4, "sequence": 0, "commandId": "golden-4" },
+    { "type": "recruit", "tick": 5, "sequence": 0, "commandId": "golden-full" }
+  ],
+  "expectedHash": "fnv1a32:92852f6a"
+}
