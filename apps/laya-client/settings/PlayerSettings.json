@@ -1,4 +1,11 @@
 {
+  "resolution": {
+    "designWidth": 750,
+    "designHeight": 1334,
+    "scaleMode": "showall",
+    "screenMode": "none",
+    "backgroundColor": "#101014"
+  },
   "physics2D": {
     "defaultConfig": {
       "debugDraw": false
