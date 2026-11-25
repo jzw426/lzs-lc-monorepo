@@ -34,7 +34,7 @@ function readJson(path: string): unknown {
     throw new Error('文件不存在');
   }
   try {
-    return JSON.parse(readFileSync(path, 'utf8')) as unknown;
+    return JSON.parse(readFileSync(path, 'utf8').replace(/^\uFEFF/, '')) as unknown;
   } catch {
     throw new Error('JSON 解析失败');
   }
@@ -120,6 +120,7 @@ function checkShaFile(dir: string, shaFile: string): ArtifactCheck {
       throw new Error(`文件不存在：${shaFile}`);
     }
     const lines = readFileSync(shaFile, 'utf8')
+      .replace(/^\uFEFF/, '')
       .split(/\r?\n/)
       .filter((line) => line.trim() !== '');
     if (lines.length === 0) {

@@ -91,6 +91,14 @@ export default tseslint.config(
     },
   },
   {
+    files: ['apps/laya-client/scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
+    },
+  },
+  {
     files: ['**/*.test.ts'],
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',

@@ -1,63 +1,218 @@
+# ============================================================
+# GitHub Actions CI
+# 技术栈：Node 22.20.0（.nvmrc）+ pnpm 11.6.0（packageManager）
+# 触发：main / release/** 推送、v* 标签、指向 main / release/** 的 PR、手动触发
+# 告警：notify job 写 Step Summary；配置 CI_ALERT_WEBHOOK 后推送 Webhook
+# ============================================================
 name: CI
 
 on:
   push:
     branches:
       - main
+      - 'release/**' # 发布分支推送；feature 分支通过 PR 触发，避免重复运行
+    tags:
+      - 'v*' # 标签推送触发，用于归档带版本号的制品
   pull_request:
+    branches:
+      - main
+      - 'release/**'
+    types: [opened, synchronize, reopened] # PR 新建、更新、重开时触发
+  workflow_dispatch: # 支持手动触发，便于排障与重跑
 
+# 最小权限：只读仓库内容；如需创建 Release，单独给对应 job 提升权限
 permissions:
   contents: read
 
-jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+# 同一分支/PR 的新运行会取消旧运行，节省额度并避免陈旧结果
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-      - name: Setup pnpm
+env:
+  NODE_VERSION: '22.20.0' # 与 .nvmrc、engines 保持一致
+  PNPM_VERSION: '11.6.0' # 与 packageManager 保持一致
+  CI: 'true'
+
+jobs:
+  quality:
+    name: 代码质量
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # 防止异常挂起持续占用额度
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # 仅当前提交，减少检出时间
+
+      - name: 安装 pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.6.0
-          run_install: false
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false # 安装统一放到下一步，便于重试
 
-      - name: Setup Node.js
+      - name: 安装 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
+          node-version-file: .nvmrc # 固定 22.20.0
+          cache: pnpm # 缓存 pnpm store，命中后安装显著加速
+          cache-dependency-path: pnpm-lock.yaml
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: 安装依赖（失败重试）
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3 # 仅应对网络抖动；业务失败不放这里
+          retry_on: error
+          command: pnpm install --frozen-lockfile
 
-      - name: Check formatting
+      - name: 格式检查
         run: pnpm run format:check
 
       - name: Lint
         run: pnpm run lint
 
-      - name: Typecheck
+      - name: 类型检查
         run: pnpm run typecheck
 
-      - name: Test
+  test:
+    name: 单元测试
+    needs: quality # 质量门禁通过后再跑测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: 安装依赖（失败重试）
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_on: error
+          command: pnpm install --frozen-lockfile
+
+      - name: 单元测试
         run: pnpm run test
 
-      - name: Test core with coverage
+      - name: 覆盖率统计
         run: pnpm run test:coverage
 
-      - name: Upload core coverage
+      - name: 上传覆盖率报告
+        if: always() # 测试失败也保留现场，便于定位
         uses: actions/upload-artifact@v4
         with:
           name: core-coverage
           path: packages/core/coverage
-          if-no-files-found: error
+          if-no-files-found: error # 覆盖率缺失视为异常
+          retention-days: 7
 
-      - name: Build
+  build:
+    name: 构建与校验
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: 安装依赖（失败重试）
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_on: error
+          command: pnpm install --frozen-lockfile
+
+      - name: 构建
         run: pnpm run build
 
-      - name: Validate content
+      - name: 内容配置校验
         run: pnpm run validate:content
 
-      - name: Replay golden fixtures
+      - name: 黄金回放
         run: pnpm run replay:golden
+
+      - name: 生成构建元数据
+        run: |
+          {
+            echo "commit=$GITHUB_SHA"
+            echo "ref=$GITHUB_REF"
+            echo "event=$GITHUB_EVENT_NAME"
+            echo "run_id=$GITHUB_RUN_ID"
+            echo "run_url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "built_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > build-meta.txt
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-dist
+          path: |
+            packages/*/dist
+            apps/laya-client/dist
+            build-meta.txt
+          if-no-files-found: warn # 客户端未产出发布目录时不阻断
+          retention-days: 7
+
+  notify:
+    name: 失败告警
+    needs: [quality, test, build]
+    if: failure() # 任一上游 job 失败时执行
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 写入失败摘要
+        if: always()
+        run: |
+          {
+            echo '## CI 失败'
+            echo ''
+            echo "| 项目 | 值 |"
+            echo "| --- | --- |"
+            echo "| 仓库 | \`$GITHUB_REPOSITORY\` |"
+            echo "| 引用 | \`$GITHUB_REF\` |"
+            echo "| 事件 | \`$GITHUB_EVENT_NAME\` |"
+            echo "| 提交 | \`$GITHUB_SHA\` |"
+            echo "| 运行 | $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 推送 Webhook 告警（可选）
+        if: always()
+        env:
+          WEBHOOK: ${{ secrets.CI_ALERT_WEBHOOK }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo '未配置 CI_ALERT_WEBHOOK，跳过 Webhook 告警'
+            exit 0
+          fi
+          TEXT="CI 失败: $GITHUB_REPOSITORY @ $GITHUB_REF ($GITHUB_EVENT_NAME) $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            -d "{\"msg_type\":\"text\",\"content\":{\"text\":\"$TEXT\"}}" \
+            "$WEBHOOK"
