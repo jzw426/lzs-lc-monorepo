@@ -16,6 +16,7 @@
     "test": "pnpm run build && pnpm -r --if-present test",
     "test:coverage": "pnpm run build && pnpm --filter @lzs/core test:coverage",
     "validate:content": "pnpm run build && pnpm --filter @lzs/tools validate:content",
+    "validate:build": "pnpm run build && tsx packages/tools/src/cli.ts validate-build",
     "replay:golden": "pnpm run build && pnpm --filter @lzs/tools replay:golden",
     "ci": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:coverage && pnpm run build && pnpm run validate:content && pnpm run replay:golden"
   },

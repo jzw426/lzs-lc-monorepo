@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { loadBaselineBundle } from '@lzs/content/node';
 import { runReplay } from '@lzs/core';
+import { validateBuildArtifacts } from './build-artifacts.js';
 import { loadReplay, simulate, verifyReplay } from './operations.js';
 
 function writeJson(value: unknown): void {
@@ -62,7 +63,29 @@ function main(argv: string[]): void {
     });
     return;
   }
-  throw new TypeError('命令仅支持validate-content、replay、simulate');
+  if (command === 'validate-build') {
+    const { values, positionals } = parseArgs({
+      args,
+      allowPositionals: true,
+      options: {
+        appid: { type: 'string' },
+        sha: { type: 'string' },
+      },
+    });
+    const dir = resolve(positionals[0] ?? 'apps/laya-client/dist/douyin');
+    const options = {
+      dir,
+      ...(values.appid === undefined ? {} : { expectedAppId: values.appid }),
+      ...(values.sha === undefined ? {} : { shaFile: resolve(values.sha) }),
+    };
+    const report = validateBuildArtifacts(options);
+    writeJson(report);
+    if (report.status !== 'ok') {
+      process.exitCode = 1;
+    }
+    return;
+  }
+  throw new TypeError('命令仅支持validate-content、replay、simulate、validate-build');
 }
 
 try {
