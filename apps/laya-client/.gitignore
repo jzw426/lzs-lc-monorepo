@@ -4,5 +4,6 @@ local
 release
 node_modules
 build
+dist
 bin/js/bundles
 engine/types
