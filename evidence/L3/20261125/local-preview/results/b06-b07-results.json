@@ -1,0 +1,383 @@
+{
+  "console": [
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log:warning] [.WebGL-0x20940042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x20940042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x20940042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x20940042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}"
+  ],
+  "exceptions": [],
+  "reloads": [
+    {
+      "i": 1,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 2,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 3,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 4,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 5,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 6,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 7,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 8,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 9,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    },
+    {
+      "i": 10,
+      "booted": true,
+      "bootOk": 1,
+      "bootFailed": 0,
+      "hash": "fnv1a32:92852f6a",
+      "replay": {
+        "hash": "fnv1a32:92852f6a",
+        "tick": 8,
+        "events": 6
+      },
+      "click": {
+        "clicked": "CLICKED",
+        "actionOk": 1
+      }
+    }
+  ],
+  "viewports": [
+    {
+      "width": 720,
+      "height": 1280,
+      "booted": true,
+      "layout": {
+        "stage": {
+          "w": 750,
+          "h": 1334
+        },
+        "uiRootY": 0,
+        "nodes": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 40,
+            "y": 80,
+            "w": 670,
+            "h": 300
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 670,
+            "h": 80
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 220,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 400,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          }
+        ]
+      },
+      "inside": true,
+      "screenshot": "e:\\SmallGames\\fkzyad\\apps\\laya-client\\temp\\b06-720x1280.png"
+    },
+    {
+      "width": 1080,
+      "height": 2400,
+      "booted": true,
+      "layout": {
+        "stage": {
+          "w": 750,
+          "h": 1334
+        },
+        "uiRootY": 0,
+        "nodes": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 40,
+            "y": 80,
+            "w": 670,
+            "h": 300
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 670,
+            "h": 80
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 220,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 400,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          }
+        ]
+      },
+      "inside": true,
+      "screenshot": "e:\\SmallGames\\fkzyad\\apps\\laya-client\\temp\\b06-1080x2400.png"
+    },
+    {
+      "width": 1170,
+      "height": 2532,
+      "booted": true,
+      "layout": {
+        "stage": {
+          "w": 750,
+          "h": 1334
+        },
+        "uiRootY": 0,
+        "nodes": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "w": 750,
+            "h": 1334
+          },
+          {
+            "x": 40,
+            "y": 80,
+            "w": 670,
+            "h": 300
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 670,
+            "h": 80
+          },
+          {
+            "x": 40,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 220,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          },
+          {
+            "x": 400,
+            "y": 440,
+            "w": 150,
+            "h": 60
+          }
+        ]
+      },
+      "inside": true,
+      "screenshot": "e:\\SmallGames\\fkzyad\\apps\\laya-client\\temp\\b06-1170x2532.png"
+    }
+  ]
+}

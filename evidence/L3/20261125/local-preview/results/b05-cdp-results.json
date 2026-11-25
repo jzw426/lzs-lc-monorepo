@@ -1,0 +1,137 @@
+{
+  "console": [
+    "[log:warning] <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+    "[log:warning] [.WebGL-0x4dc0042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x4dc0042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x4dc0042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[log:warning] [.WebGL-0x4dc0042f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[log] [L3_BOOT_OK] {\"version\":\"3.3.0\",\"configHash\":\"fnv1a32:e7ae79c0\"}",
+    "[log] [L3_REWARD_COUNT] 1",
+    "[log] [L3_ACTION_OK] 登录",
+    "[log] [L3_REWARD_COUNT] 2",
+    "[log] [L3_ACTION_OK] 广告",
+    "[log] [L3_ACTION_OK] 分享",
+    "[error] [L3_VIEW_ERROR] Error: L3_INJECTED_VIEW_ERROR\n    at StatusView.render (http://127.0.0.1:18090/js/bundles/bundle.js:621:15)\n    at ClientRuntime.advanceTick (http://127.0.0.1:18090/js/bundles/bundle.js:44:19)\n    at GameScene.onUpdate (http://127.0.0.1:18090/js/bundles/bundle.js:718:37)\n    at ComponentDriver.callUpdate (http://127.0.0.1:18090/libs/laya.core.js:22628:29)\n    at Stage._runComponents (http://127.0.0.1:18090/libs/laya.core.js:23356:35)\n    at Stage.render (http://127.0.0.1:18090/libs/laya.core.js:23277:22)\n    at Render.loop (http://127.0.0.1:18090/libs/laya.core.js:6830:25)\n    at loop (http://127.0.0.1:18090/libs/laya.core.js:6821:28)"
+  ],
+  "exceptions": [],
+  "checks": {
+    "booted": true,
+    "version": "3.3.0",
+    "hash": "fnv1a32:92852f6a",
+    "recruit": {
+      "snapshot": {
+        "config": {
+          "seed": 20260304,
+          "initialGrain": 100,
+          "barracksCapacity": 5,
+          "recruitCost": 10,
+          "deck": ["刀", "枪", "骑", "弓"],
+          "versions": {
+            "gameVersion": "0.1.0-m1",
+            "contentVersion": "content-m1.0",
+            "rulesVersion": "rules-m1.0",
+            "configHash": "fnv1a32:e7ae79c0"
+          }
+        },
+        "state": {
+          "tick": 15,
+          "grain": 90,
+          "barracks": ["骑", null, null, null, null],
+          "successfulRecruits": 1,
+          "rejectedRecruits": 0,
+          "nextEventSequence": 1,
+          "processedCommandIds": ["l3-14"],
+          "random": {
+            "a": 2919751423,
+            "b": 684538216,
+            "c": 2742466862,
+            "d": 2744586329
+          }
+        }
+      },
+      "events": [
+        {
+          "tick": 14,
+          "sequence": 0,
+          "commandId": "l3-14",
+          "type": "recruited",
+          "slot": 0,
+          "unit": "骑",
+          "remainingGrain": 90
+        }
+      ]
+    },
+    "login": {
+      "userId": "mock-user-1",
+      "sessionToken": "mock-session-1"
+    },
+    "ad": {
+      "placementId": "替换为广告位ID",
+      "completed": true
+    },
+    "share": {
+      "shared": true
+    },
+    "rewardCount": 1,
+    "storage": "ok",
+    "tree": "0:Stage|1:Sprite|1:root|2:Main|3:Background|3:GameRoot|4:UIRoot|5:StatusText|5:ActionBar|6:LoginButton|6:AdButton|6:ShareButton",
+    "nodes": [
+      ["UIRoot", true],
+      ["StatusText", true],
+      ["ActionBar", true],
+      ["LoginButton", true],
+      ["AdButton", true],
+      ["ShareButton", true]
+    ],
+    "clicks": {
+      "LoginButton": "CLICKED",
+      "AdButton": "CLICKED",
+      "ShareButton": "CLICKED"
+    },
+    "hashAfterBreak": "fnv1a32:92852f6a",
+    "recruitAfterBreak": {
+      "snapshot": {
+        "config": {
+          "seed": 20260304,
+          "initialGrain": 100,
+          "barracksCapacity": 5,
+          "recruitCost": 10,
+          "deck": ["刀", "枪", "骑", "弓"],
+          "versions": {
+            "gameVersion": "0.1.0-m1",
+            "contentVersion": "content-m1.0",
+            "rulesVersion": "rules-m1.0",
+            "configHash": "fnv1a32:e7ae79c0"
+          }
+        },
+        "state": {
+          "tick": 170,
+          "grain": 80,
+          "barracks": ["骑", "骑", null, null, null],
+          "successfulRecruits": 2,
+          "rejectedRecruits": 0,
+          "nextEventSequence": 2,
+          "processedCommandIds": ["l3-14", "l3-169"],
+          "random": {
+            "a": 626915278,
+            "b": 633102009,
+            "c": 2533603281,
+            "d": 3511258202
+          }
+        }
+      },
+      "events": [
+        {
+          "tick": 169,
+          "sequence": 1,
+          "commandId": "l3-169",
+          "type": "recruited",
+          "slot": 1,
+          "unit": "骑",
+          "remainingGrain": 80
+        }
+      ]
+    }
+  },
+  "screenshot": true
+}
