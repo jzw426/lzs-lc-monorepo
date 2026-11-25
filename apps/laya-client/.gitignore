@@ -5,3 +5,4 @@ release
 node_modules
 build
 bin/js/bundles
+engine/types
